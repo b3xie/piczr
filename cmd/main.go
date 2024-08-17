@@ -20,7 +20,7 @@ func main() {
 	fs := http.FileServer(http.Dir(staticDir))
 	http.Handle("/assets", http.StripPrefix("/assets/", fs))
 	http.Handle("/", http.FileServer(http.Dir(staticDir)))
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe("localhost:8080", nil)
 	if err != nil {
 		println(err.Error())
 	}
