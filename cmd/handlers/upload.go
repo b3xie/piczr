@@ -5,19 +5,25 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"time"
 )
 
 func PhotoUpload(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(209715200)
 	if err != nil {
+		w.Header().Set("error", err.Error())
+		w.WriteHeader(http.StatusRequestEntityTooLarge)
 		return
 	}
+	unixTime := time.Now()
 	file, handler, err := r.FormFile("photo")
 	if err != nil {
-		panic(err)
+		fmt.Println("errororo")
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 	defer file.Close()
-	dst, err := os.Create("assets/" + handler.Filename)
+	filename := string(unixTime.Unix()) + handler.Filename
+	dst, err := os.Create("../../assets/" + filename)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -28,7 +34,7 @@ func PhotoUpload(w http.ResponseWriter, r *http.Request) {
 		}
 	}(dst)
 	if _, err := io.Copy(dst, file); err != nil {
-		println("error writing to file:" + handler.Filename)
+		println("error writing to file:" + filename)
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return

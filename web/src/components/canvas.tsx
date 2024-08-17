@@ -1,8 +1,9 @@
-import Box from "@mui/material/Box";
+import {Container} from "@mui/material";
+
 
 export function Canvas() {
-return <Box sx={{backgroundColor: "grey", width: "600px", height: "400px", alignSelf: 'center'}}>
+return <Container sx={{backgroundColor: "grey", width: "600px", height: "400px"}}>
 
-</Box>
+</Container>
 
 }
